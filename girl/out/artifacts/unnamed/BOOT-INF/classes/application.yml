@@ -1,0 +1,10 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /girl
+selfParam: A
+age: 18
+content: "selfParam:${selfParam},age:${age}"
+boy:
+  height: 175
+  weight: 120

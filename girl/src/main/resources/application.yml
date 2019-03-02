@@ -1,0 +1,47 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /girl
+selfParam: A
+age: 18
+content: "selfParam:${selfParam},age:${age}"
+boy:
+  name: "张三"
+  emial: "1231233@qq.com"
+  height: 175
+  weight: 120
+  habit:
+      - 篮球
+      - 足球
+spring:
+  profiles:
+    active: @profileActive@
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 1
+    maxActive: 20
+    minIdle: 3
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    database-platform:
+    open-in-view: true
+---
+spring:
+  profiles: dev
+  datasource:
+    data-password: 123456
+    data-username: root
+
+    url: jdbc:mysql://localhost:3306/test?allowMultiQueries=true&useSSL=false
