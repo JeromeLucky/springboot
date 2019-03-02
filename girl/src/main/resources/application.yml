@@ -18,22 +18,25 @@ spring:
     active: @profileActive@
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    initialSize: 1
+    initialSize: 5
     maxActive: 20
-    minIdle: 3
+    minIdle: 5
     maxWait: 60000
     timeBetweenEvictionRunsMillis: 60000
     minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 'x'
+    validationQuery: SELECT 1 FROM DUAL
     testWhileIdle: true
     testOnBorrow: false
     testOnReturn: false
-    poolPreparedStatements: true
+    # poolPreparedStatements: Oracle为true，MySql可为false
+    poolPreparedStatements: false
     maxPoolPreparedStatementPerConnectionSize: 20
-    driver-class-name: com.mysql.jdbc.Driver
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    filters: stat,log4j
+
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     database-platform:
     open-in-view: true
@@ -41,7 +44,13 @@ spring:
 spring:
   profiles: dev
   datasource:
-    data-password: 123456
-    data-username: root
-
-    url: jdbc:mysql://localhost:3306/test?allowMultiQueries=true&useSSL=false
+    testdb:
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8
+      username: root
+      password: 123456
+    demodb:
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8
+      username: root
+      password: 123456
