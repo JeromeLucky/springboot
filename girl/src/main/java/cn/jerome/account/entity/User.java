@@ -10,6 +10,7 @@
  */
 package cn.jerome.account.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -20,12 +21,28 @@ import java.io.Serializable;
  * @create 2019/3/1
  * @since 1.0.0
  */
-
+@Entity
 public class User implements Serializable{
-        private long userId;
-        private String acctName;
-        private String pwd;
-        private String email;
+    @Id
+    @SequenceGenerator(name = "user_generator", sequenceName = "user_sequence", initialValue = 23)
+    @GeneratedValue(generator = "city_generator")
+    private long userId;
+    @Column(nullable = false)
+    private String acctName;
+    @Column(nullable = false)
+    private String pwd;
+    @Column(nullable = false)
+    private String email;
+
+    public User(String acctName, String pwd, String email) {
+        this.acctName = acctName;
+        this.pwd = pwd;
+        this.email = email;
+    }
+
+    public User() {
+        super();
+    }
 
     public long getUserId() {
         return userId;

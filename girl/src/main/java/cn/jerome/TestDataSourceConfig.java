@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement // 开启注解事务管理
 @EnableJpaRepositories(entityManagerFactoryRef = "testEntityManagerFactory", // 实体类工厂依赖
         transactionManagerRef = "testTransactionManager", // 事务依赖
-        basePackages = "com.lcy.repository.test") // repository类所在的包
+        basePackages = "cn.jerome.account.dao") // repository类所在的包
 public class TestDataSourceConfig {
     private Logger log = LoggerFactory.getLogger(TestDataSourceConfig.class);
 

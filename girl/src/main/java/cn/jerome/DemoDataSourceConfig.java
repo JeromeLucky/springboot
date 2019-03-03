@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableJpaRepositories(entityManagerFactoryRef = "demoEntityManagerFactory",
         transactionManagerRef = "demoTransactionManager",
-        basePackages = "com.lcy.repository.demo")
+        basePackages = "cn.jerome.account.dao")
 public class DemoDataSourceConfig {
 
     private Logger log = LoggerFactory.getLogger(TestDataSourceConfig.class);

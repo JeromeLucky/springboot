@@ -1,6 +1,9 @@
 package cn.jerome;
 
 import cn.jerome.account.entity.BathResignReq;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
@@ -9,6 +12,8 @@ import cn.jerome.account.entity.User;
 
 @RestController
 public class HelloController {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Value("${selfParam}")
     private String selfParam;
     @Value("${age}")
@@ -40,7 +45,7 @@ public class HelloController {
     @ModelAttribute("acct1")
     @RequestMapping(path = "/test4",method = RequestMethod.POST)
     public String test4(Model model,@RequestBody User req){
-        model.addAttribute(req);
+        model.addAttribute("acct2",req);
         return "success";
     }
     @RequestMapping(path = "/test5",method = RequestMethod.POST)
