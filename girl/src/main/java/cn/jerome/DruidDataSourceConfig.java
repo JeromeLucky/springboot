@@ -14,7 +14,6 @@ package cn.jerome;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
-
 import com.alibaba.druid.pool.DruidDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,11 +113,11 @@ public class DruidDataSourceConfig {
     @Value("${spring.datasource.demodb.driverClassName}")
     private String demoDriverClassName;
 
-   /* @Bean(name = "demoDataSource")
+   @Bean(name = "demoDataSource")
     public DataSource demoDataSource() {
         log.info("创建demoDataSource数据源");
         return createDataSource(demoUrl, demoUsername, demoPassword, demoDriverClassName);
-    }*/
+    }
 
 	/* #####################demoDataSource配置##################### */
 

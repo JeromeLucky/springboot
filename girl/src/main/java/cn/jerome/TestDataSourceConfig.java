@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -32,15 +33,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.orm.jpa.vendor.Database;
 
 @Configuration
 @EnableTransactionManagement // 开启注解事务管理
 @EnableJpaRepositories(entityManagerFactoryRef = "testEntityManagerFactory", // 实体类工厂依赖
         transactionManagerRef = "testTransactionManager", // 事务依赖
-        basePackages = "cn.jerome.account.dao") // repository类所在的包
+        basePackages = "cn.jerome.account.dao") // repository类所在的包*/
 public class TestDataSourceConfig {
     private Logger log = LoggerFactory.getLogger(TestDataSourceConfig.class);
 
@@ -58,14 +62,28 @@ public class TestDataSourceConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(EntityManagerFactoryBuilder builder) {
         log.info("创建testEntityManagerFactoryBean");
         return builder.dataSource(dataSource)// 设置使用的数据源
-                .properties(jpaProperties.getHibernateProperties(dataSource)// 设置JPA属性
-                .packages("com.lcy.entity.test")// 设置实体类所在的包
-                // 持久性单元的名称,如果只构建一个EntityManagerFactory，可以省略它，
-                // 但是如果在同一个应用程序中有多个，应该给它们起不同的名称。
+               /* .properties(jpaProperties.getHibernateProperties(new HibernateSettings())// 设置JPA属性
+                .packages("cn.jerome.account.entity")// 设置实体类所在的包
+                .persistenceUnit("testPersistenceUnit")
+                .build();
+                .dataSource(dataSource)*/
+                .properties(jpaProperties.getHibernateProperties(new HibernateSettings()))
+                .packages("cn.jerome.account.entity")
                 .persistenceUnit("testPersistenceUnit")
                 .build();
         // 不要在这里直接获取EntityManagerFactory
     }
+
+    @Bean
+    public JpaVendorAdapter jpaVendorAdapter() {
+        HibernateJpaVendorAdapter adapter =new HibernateJpaVendorAdapter();
+        adapter.setDatabase(Database.MYSQL);
+        adapter.setShowSql(false);
+        adapter.setGenerateDdl(true);
+        adapter.setDatabasePlatform("org.hibernate.dialect.MySQL5Dialect");
+        return adapter;
+    }
+
 
     /*
      * EntityManagerFactory类似于Hibernate的SessionFactory,mybatis的SqlSessionFactory

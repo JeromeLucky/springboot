@@ -12,6 +12,7 @@ package cn.jerome.account.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -22,10 +23,22 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @Entity
+/*@Table(name="USER",uniqueConstraints = {
+        @UniqueConstraint(name="",columnNames = {""})
+},
+indexes = {
+        @Index(name="",columnList = "")
+})*/
 public class User implements Serializable{
-    @Id
+   /* @Id
     @SequenceGenerator(name = "user_generator", sequenceName = "user_sequence", initialValue = 23)
-    @GeneratedValue(generator = "city_generator")
+    @GeneratedValue(generator = "user_sequence")*/
+    /*
+     @Id
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    @Column(name = "ID", unique = true, nullable = false, length = 32)
+    */
     private long userId;
     @Column(nullable = false)
     private String acctName;
@@ -33,17 +46,34 @@ public class User implements Serializable{
     private String pwd;
     @Column(nullable = false)
     private String email;
+    private Date createTime;
 
-    public User(String acctName, String pwd, String email) {
+    public User(String acctName, String pwd, String email,Date createTime) {
         this.acctName = acctName;
         this.pwd = pwd;
         this.email = email;
+        this.createTime=createTime;
     }
-
     public User() {
         super();
     }
+    @TableGenerator(name = "customer_gen",
 
+            table="tb_generator",
+
+            pkColumnName="gen_name",
+
+            valueColumnName="gen_value",
+
+            pkColumnValue="CUSTOMER_PK",
+
+            allocationSize=1,
+
+            initialValue = 100
+
+    )
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator="customer_gen")
     public long getUserId() {
         return userId;
     }
@@ -74,5 +104,14 @@ public class User implements Serializable{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_time",nullable=true,columnDefinition="timestamp default current_timestamp")
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

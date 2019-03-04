@@ -46,11 +46,11 @@ spring:
   datasource:
     testdb:
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8
+      url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8
       username: root
       password: 123456
     demodb:
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8
+      url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8
       username: root
       password: 123456

@@ -10,7 +10,6 @@
  */
 package cn.jerome;
 
-
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -18,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +27,6 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
 /**
  * 〈一句话功能简述〉<br> 
  * 〈DemoDataSourceConfig 〉
@@ -57,8 +56,8 @@ public class DemoDataSourceConfig {
         log.info("创建demoEntityManagerFactoryBean");
         return builder
                 .dataSource(dataSource)
-                .properties(jpaProperties.getHibernateProperties(dataSource))
-                .packages("com.lcy.entity.demo")
+                .properties(jpaProperties.getHibernateProperties(new HibernateSettings()))
+                .packages("cn.jerome.account.entity")
                 .persistenceUnit("demoPersistenceUnit")
                 .build();
     }
