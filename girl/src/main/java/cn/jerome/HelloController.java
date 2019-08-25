@@ -1,14 +1,20 @@
 package cn.jerome;
 
+import cn.jerome.account.entity.AccountUser;
+import cn.jerome.account.entity.AccoutQueryCons;
 import cn.jerome.account.entity.BathResignReq;
 
+import cn.jerome.account.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import cn.jerome.account.entity.User;
+
+import java.util.List;
 
 @RestController
 public class HelloController {
@@ -22,13 +28,18 @@ public class HelloController {
     private String message;
 
     @Autowired
+    private IUserService userService;
+
+    @Autowired
     private  BoyProperties boyProperties;
+
+    //restful url取参数
     @RequestMapping(value = "/test1/{name}",method = RequestMethod.GET)
     public  String say(@PathVariable("name") String aa){
-
         return "hello springBoot         "+selfParam+"message       "+message+"*******"+aa;
     }
 
+    //测试从boy参数内取值 boyProperties 参数类
     @RequestMapping(value = "/test2",method = RequestMethod.GET)
     public String boyTest(){
         StringBuffer hibateSb = new StringBuffer();
@@ -37,28 +48,50 @@ public class HelloController {
         }
         return boyProperties.getHeight()+"---------"+boyProperties.getWeight()+"habit"+hibateSb.toString();
     }
+    //传递指定参数 account password
     @RequestMapping(path = "/test3",method = RequestMethod.POST)
     public String test3(@RequestParam(name = "account",required = true) String acct,@RequestParam(name = "password",required = true) String pwd)
     {
         return  "account**"+acct+"pwd###"+ pwd;
     }
+    //将请求的参数存入model
     @ModelAttribute("acct1")
     @RequestMapping(path = "/test4",method = RequestMethod.POST)
-    public String test4(Model model,@RequestBody User req){
+    public String test4(Model model,@RequestBody AccountUser req){
         model.addAttribute("acct2",req);
         return "success";
     }
+
     @RequestMapping(path = "/test5",method = RequestMethod.POST)
-    public String test4(@ModelAttribute("acct1") @RequestBody User req){
+    public String test4(@ModelAttribute("acct1") @RequestBody AccountUser req){
 
         return "success";
     }
+    //post请求 参数为对象BathResignReq
     @RequestMapping(path = "/bathResigin",method = RequestMethod.POST)
-    public String test5(@RequestBody BathResignReq req){
+    public List<AccountUser> test5(@RequestBody BathResignReq req){
         StringBuffer acctIdsb = new StringBuffer();
-        for(User user : req.getAcctArray()){
-            acctIdsb.append(user.getUserId()+"");
+        for(AccountUser accountUser : req.getAcctArray()){
+            acctIdsb.append(accountUser.getUserId()+"");
         }
-        return  req.getOrderId()+"resign accid"+acctIdsb.toString();
+        System.out.println(req.getOrderId()+"resign accid"+acctIdsb.toString());
+
+        List<AccountUser> lists = userService.saveAll(req.getAcctArray());
+        return lists;
     }
- }
+
+    //调用userService 进行dao操作
+    @RequestMapping(value = "/addUser",method = RequestMethod.POST)
+    public  AccountUser addUser (@RequestBody AccountUser accountUser){
+
+       AccountUser user = (AccountUser) userService.saveAcctuser(accountUser);
+       return  user;
+    }
+
+    //分页查询
+    @RequestMapping(value = "/findbypage",method = RequestMethod.POST)
+    public  Page<AccountUser> findbypage (@RequestBody AccoutQueryCons queryCons){
+        Page<AccountUser> users = userService.findByPage(queryCons);
+        return  users;
+    }
+}

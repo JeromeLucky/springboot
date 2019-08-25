@@ -10,7 +10,6 @@
  */
 package cn.jerome.account.entity;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -24,7 +23,7 @@ import java.util.List;
 
 public class BathResignReq {
     private long orderId;
-    private List<User> acctArray;
+    private List<AccountUser> acctArray;
 
     public long getOrderId() {
         return orderId;
@@ -34,11 +33,11 @@ public class BathResignReq {
         this.orderId = orderId;
     }
 
-    public List<User> getAcctArray() {
+    public List<AccountUser> getAcctArray() {
         return acctArray;
     }
 
-    public void setAcctArray(List<User> acctArray) {
+    public void setAcctArray(List<AccountUser> acctArray) {
         this.acctArray = acctArray;
     }
 }

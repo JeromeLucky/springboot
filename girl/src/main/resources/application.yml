@@ -40,6 +40,8 @@ spring:
     show-sql: true
     database-platform:
     open-in-view: true
+  #指定静态资源加载位置
+  resources:
 ---
 spring:
   profiles: dev

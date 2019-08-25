@@ -1,6 +1,6 @@
 /**
  * Copyright (C), 2015-2019, XXX有限公司
- * FileName: User
+ * FileName: AccountUser
  * Author:   JG
  * Date:     2019/3/1 20:22
  * Description: 用户信息
@@ -9,6 +9,10 @@
  * 作者姓名           修改时间           版本号              描述
  */
 package cn.jerome.account.entity;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,22 +27,45 @@ import java.util.Date;
  * @since 1.0.0
  */
 @Entity
-/*@Table(name="USER",uniqueConstraints = {
+/*
+//手动定义 映射的table 和table的 主键和索引
+@Table(name="USER",uniqueConstraints = {
         @UniqueConstraint(name="",columnNames = {""})
 },
 indexes = {
         @Index(name="",columnList = "")
 })*/
-public class User implements Serializable{
-   /* @Id
+public class AccountUser  extends BaseEntity implements Serializable{
+   /*
+    //主键id的oracle生成方式
+    @Id
     @SequenceGenerator(name = "user_generator", sequenceName = "user_sequence", initialValue = 23)
     @GeneratedValue(generator = "user_sequence")*/
     /*
-     @Id
+    //主键id的值 生成方式 system-uuid
+    @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     @Column(name = "ID", unique = true, nullable = false, length = 32)
     */
+   //ID 根据customer_gen 主键生成表获取
+   @TableGenerator(name = "customer_gen",
+
+           table="tb_generator",
+
+           pkColumnName="gen_name",
+
+           valueColumnName="gen_value",
+
+           pkColumnValue="CUSTOMER_PK",
+
+           allocationSize=1,
+
+           initialValue = 100
+
+   )
+   @Id
+   @GeneratedValue(strategy = GenerationType.SEQUENCE,generator="customer_gen")
     private long userId;
     @Column(nullable = false)
     private String acctName;
@@ -46,34 +73,15 @@ public class User implements Serializable{
     private String pwd;
     @Column(nullable = false)
     private String email;
-    private Date createTime;
 
-    public User(String acctName, String pwd, String email,Date createTime) {
+    public AccountUser(String acctName, String pwd, String email) {
         this.acctName = acctName;
         this.pwd = pwd;
         this.email = email;
-        this.createTime=createTime;
     }
-    public User() {
+    public AccountUser() {
         super();
     }
-    @TableGenerator(name = "customer_gen",
-
-            table="tb_generator",
-
-            pkColumnName="gen_name",
-
-            valueColumnName="gen_value",
-
-            pkColumnValue="CUSTOMER_PK",
-
-            allocationSize=1,
-
-            initialValue = 100
-
-    )
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator="customer_gen")
     public long getUserId() {
         return userId;
     }
@@ -105,13 +113,5 @@ public class User implements Serializable{
     public void setEmail(String email) {
         this.email = email;
     }
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_time",nullable=true,columnDefinition="timestamp default current_timestamp")
-    public Date getCreateTime() {
-        return createTime;
-    }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 }
