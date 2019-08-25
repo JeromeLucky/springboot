@@ -16,4 +16,5 @@ public interface IUserService<T> {
     public T saveAcctuser(T t);
     public List<T> findBySort(AccoutQueryCons queryCons);
     public List<T> saveAll(List<T> list);
+    public int updateName(String name,Long userId);
  }

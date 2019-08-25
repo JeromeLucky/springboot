@@ -80,4 +80,12 @@ public class UserServiceImpl implements IUserService<AccountUser> {
         List<AccountUser> accountUsers = userRepository.save(list);
         return accountUsers;
     }
+
+    @Override
+    public int updateName(String name, Long userId) {
+
+        int n = userRepository.updateName(name,userId);
+
+        return n;
+    }
 }

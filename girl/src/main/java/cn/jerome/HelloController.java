@@ -48,11 +48,11 @@ public class HelloController {
         }
         return boyProperties.getHeight()+"---------"+boyProperties.getWeight()+"habit"+hibateSb.toString();
     }
-    //传递指定参数 account password
-    @RequestMapping(path = "/test3",method = RequestMethod.POST)
-    public String test3(@RequestParam(name = "account",required = true) String acct,@RequestParam(name = "password",required = true) String pwd)
+    //传递指定参数 newName userId ?newName="Jerome"&userId=101
+    @RequestMapping(path = "/updateName",method = RequestMethod.POST)
+    public int updateName (@RequestParam(name = "newName",required = true) String newName,@RequestParam(name = "userId",required = true) Long userId)
     {
-        return  "account**"+acct+"pwd###"+ pwd;
+        return  userService.updateName(newName,userId);
     }
     //将请求的参数存入model
 
@@ -88,10 +88,11 @@ public class HelloController {
        return  user;
     }
 
-    //分页查询
+    //分页查询加排序
     @RequestMapping(value = "/findbypage",method = RequestMethod.POST)
     public  Page<AccountUser> findbypage (@RequestBody AccoutQueryCons queryCons){
         Page<AccountUser> users = userService.findByPage(queryCons);
         return  users;
     }
+
 }
