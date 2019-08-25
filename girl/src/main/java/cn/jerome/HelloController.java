@@ -55,11 +55,11 @@ public class HelloController {
         return  "account**"+acct+"pwd###"+ pwd;
     }
     //将请求的参数存入model
-    @ModelAttribute("acct1")
+
     @RequestMapping(path = "/test4",method = RequestMethod.POST)
     public String test4(Model model,@RequestBody AccountUser req){
         model.addAttribute("acct2",req);
-        return "success";
+        return "thymeleaf";
     }
 
     @RequestMapping(path = "/test5",method = RequestMethod.POST)

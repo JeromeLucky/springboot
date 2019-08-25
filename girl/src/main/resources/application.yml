@@ -40,8 +40,7 @@ spring:
     show-sql: true
     database-platform:
     open-in-view: true
-  #指定静态资源加载位置
-  resources:
+  #指定静态资源加载位置 pring.resources.static-locations 的默认值是：classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
 ---
 spring:
   profiles: dev
