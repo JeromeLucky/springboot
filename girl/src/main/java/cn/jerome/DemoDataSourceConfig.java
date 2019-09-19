@@ -42,7 +42,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         basePackages = "cn.jerome.account.dao")
 public class DemoDataSourceConfig {
 
-    private Logger log = LoggerFactory.getLogger(TestDataSourceConfig.class);
+    private Logger log = LoggerFactory.getLogger(DemoDataSourceConfig.class);
 
     @Autowired
     private JpaProperties jpaProperties;

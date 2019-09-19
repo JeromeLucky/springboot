@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+    <head>
+        <title>dom4j解析一个例子</title>
+         <script>
+             <username>yangrong</username>
+             <password>123456</password>
+         </script>
+    </head>
+    <body>
+        <result>0</result>
+        <form>
+            <banlce country="US" unit="$">1000</banlce>
+            <subID>36242519880716</subID>
+        </form>
+    </body>
+</html>

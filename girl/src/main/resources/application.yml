@@ -13,6 +13,12 @@ boy:
   habit:
       - 篮球
       - 足球
+netty:
+  port: 8888    #监听端口
+  bossThread: 2 #线程数
+  workerThread: 2 #线程数
+  keepalive: true #保持连接
+  backlog: 100
 spring:
   profiles:
     active: @profileActive@
