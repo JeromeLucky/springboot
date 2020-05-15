@@ -1,13 +1,22 @@
 package cn.jerome;
 
+import cn.jerome.httpclient.HttpAPIService;
+import cn.jerome.order.entity.Order;
+import cn.jerome.rabbitmq.product.OrderSender;
+import cn.jerome.redis.RedisUtil;
 import io.netty.bootstrap.ServerBootstrap;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
+import javax.annotation.Resource;
+import java.util.UUID;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,4 +37,33 @@ public class GirlApplicationTests {
 		}
 	}
 
+	@Autowired
+	private RedisUtil  redisUtil;
+
+	@Test
+	public void redistest() {
+
+		redisUtil.set("name","zwd");
+		Assert.assertEquals("zwd",redisUtil.get("name"));
+
+	}
+
+	@Autowired
+	private  OrderSender orderSender;
+
+	@Test
+	public void mqtest() throws  Exception{
+		orderSender.send(new Order("121",
+				System.currentTimeMillis()+"$"+ UUID.randomUUID().toString(),
+				"testOrder"));
+
+	}
+	@Autowired
+	private HttpAPIService httpAPIService;
+
+	@Test
+	public void httptest() throws  Exception {
+		String str = httpAPIService.doGet("http://www.baidu.com");
+		System.out.println(str);
+	}
 }

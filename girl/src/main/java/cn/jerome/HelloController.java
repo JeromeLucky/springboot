@@ -34,7 +34,9 @@ public class HelloController {
     private  BoyProperties boyProperties;
 
     //restful url取参数
+
     @RequestMapping(value = "/test1/{name}",method = RequestMethod.GET)
+
     public  String say(@PathVariable("name") String aa){
         return "hello springBoot         "+selfParam+"message       "+message+"*******"+aa;
     }
