@@ -97,12 +97,22 @@ spring:
   profiles: dev
   datasource:
     testdb:
-      driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8
-      username: root
-      password: 123456
+       driverClassName: oracle.jdbc.driver.OracleDriver  # oracle驱动
+       url: jdbc:oracle:thin:@10.226.95.174:1521:SCPDCP
+       username: FAW_TEST
+       password: FAW_TEST
     demodb:
-      driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8
-      username: root
-      password: 123456
+      driverClassName: oracle.jdbc.driver.OracleDriver  # oracle驱动
+      url: jdbc:oracle:thin:@10.226.95.174:1521:SCPDCP
+      username: FAW_TEST
+      password: FAW_TEST
+   # testdb:
+   #   driverClassName: com.mysql.jdbc.Driver
+   #   url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8
+   #   username: root
+   #   password: 123456
+   # demodb:
+   #   driverClassName: com.mysql.jdbc.Driver
+   #   url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8
+   #   username: root
+   #   password: 123456

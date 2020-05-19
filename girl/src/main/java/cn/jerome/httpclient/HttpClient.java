@@ -98,7 +98,8 @@ public class HttpClient {
     @Bean(name = "builder")
     public RequestConfig.Builder getBuilder(){
         RequestConfig.Builder builder = RequestConfig.custom();
-        return builder.setConnectTimeout(connectTimeout)
+        return builder
+                .setConnectTimeout(connectTimeout)
                 .setConnectionRequestTimeout(connectionRequestTimeout)
                 .setSocketTimeout(socketTimeout)
                 .setStaleConnectionCheckEnabled(staleConnectionCheckEnabled);

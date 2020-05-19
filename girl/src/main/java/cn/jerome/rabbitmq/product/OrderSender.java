@@ -10,12 +10,10 @@
  */
 package cn.jerome.rabbitmq.product;
 
-import cn.jerome.order.entity.Order;
+import cn.jerome.module.order.entity.Order;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
-import org.springframework.amqp.support.Correlation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 /**

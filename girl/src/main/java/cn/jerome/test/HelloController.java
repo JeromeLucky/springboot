@@ -1,16 +1,15 @@
-package cn.jerome;
+package cn.jerome.test;
 
-import cn.jerome.account.entity.AccountUser;
-import cn.jerome.account.entity.AccoutQueryCons;
-import cn.jerome.account.entity.BathResignReq;
+import cn.jerome.module.account.entity.AccountUser;
+import cn.jerome.module.account.entity.AccoutQueryCons;
+import cn.jerome.module.account.entity.BathResignReq;
 
-import cn.jerome.account.service.IUserService;
+import cn.jerome.module.account.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,6 +1,6 @@
-package cn.jerome.account.dao;
+package cn.jerome.module.account.dao;
 
-import cn.jerome.account.entity.AccountUser;
+import cn.jerome.module.account.entity.AccountUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

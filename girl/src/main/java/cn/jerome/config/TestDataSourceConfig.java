@@ -8,7 +8,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package cn.jerome;
+package cn.jerome.config;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -44,7 +44,7 @@ import org.springframework.orm.jpa.vendor.Database;
 @EnableTransactionManagement // 开启注解事务管理
 @EnableJpaRepositories(entityManagerFactoryRef = "testEntityManagerFactory", // 实体类工厂依赖
         transactionManagerRef = "testTransactionManager", // 事务依赖
-        basePackages = "cn.jerome.account.dao") // repository类所在的包*/
+        basePackages = "cn.jerome.module.account.dao") // repository类所在的包*/
 public class TestDataSourceConfig {
     private Logger log = LoggerFactory.getLogger(TestDataSourceConfig.class);
 
@@ -63,12 +63,12 @@ public class TestDataSourceConfig {
         log.info("创建testEntityManagerFactoryBean");
         return builder.dataSource(dataSource)// 设置使用的数据源
                /* .properties(jpaProperties.getHibernateProperties(new HibernateSettings())// 设置JPA属性
-                .packages("cn.jerome.account.entity")// 设置实体类所在的包
+                .packages("cn.jerome.module.account.entity")// 设置实体类所在的包
                 .persistenceUnit("testPersistenceUnit")
                 .build();
                 .dataSource(dataSource)*/
                 .properties(jpaProperties.getHibernateProperties(new HibernateSettings()))
-                .packages("cn.jerome.account.entity")
+                .packages("cn.jerome.module.account.entity")
                 .persistenceUnit("testPersistenceUnit")
                 .build();
         // 不要在这里直接获取EntityManagerFactory

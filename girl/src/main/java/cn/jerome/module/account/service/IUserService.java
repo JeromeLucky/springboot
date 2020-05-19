@@ -1,8 +1,6 @@
-package cn.jerome.account.service;
-import cn.jerome.account.entity.AccoutQueryCons;
+package cn.jerome.module.account.service;
+import cn.jerome.module.account.entity.AccoutQueryCons;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import java.lang.Long;
 import java.util.List;

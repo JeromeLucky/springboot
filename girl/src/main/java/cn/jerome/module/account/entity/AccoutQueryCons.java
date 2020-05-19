@@ -8,7 +8,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package cn.jerome.account.entity;
+package cn.jerome.module.account.entity;
 
 /**
  * 〈一句话功能简述〉<br> 

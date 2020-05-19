@@ -8,12 +8,12 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package cn.jerome.account.service.impl;
+package cn.jerome.module.account.service.impl;
 
-import cn.jerome.account.dao.UserRepository;
-import cn.jerome.account.entity.AccountUser;
-import cn.jerome.account.entity.AccoutQueryCons;
-import cn.jerome.account.service.IUserService;
+import cn.jerome.module.account.dao.UserRepository;
+import cn.jerome.module.account.entity.AccountUser;
+import cn.jerome.module.account.entity.AccoutQueryCons;
+import cn.jerome.module.account.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 

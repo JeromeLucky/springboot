@@ -8,7 +8,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package cn.jerome.order.entity;
+package cn.jerome.module.order.entity;
 
 import java.io.Serializable;
 

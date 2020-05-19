@@ -8,7 +8,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package cn.jerome;
+package cn.jerome.config;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -39,7 +39,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableJpaRepositories(entityManagerFactoryRef = "demoEntityManagerFactory",
         transactionManagerRef = "demoTransactionManager",
-        basePackages = "cn.jerome.account.dao")
+        basePackages = "cn.jerome.module.account.dao")
 public class DemoDataSourceConfig {
 
     private Logger log = LoggerFactory.getLogger(DemoDataSourceConfig.class);
@@ -57,7 +57,7 @@ public class DemoDataSourceConfig {
         return builder
                 .dataSource(dataSource)
                 .properties(jpaProperties.getHibernateProperties(new HibernateSettings()))
-                .packages("cn.jerome.account.entity")
+                .packages("cn.jerome.module.account.entity")
                 .persistenceUnit("demoPersistenceUnit")
                 .build();
     }

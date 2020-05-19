@@ -10,7 +10,7 @@
  */
 package cn.jerome.rabbitmq.product;
 
-import cn.jerome.order.entity.Order;
+import cn.jerome.module.order.entity.Order;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.rabbit.annotation.*;
 import org.springframework.amqp.support.AmqpHeaders;
