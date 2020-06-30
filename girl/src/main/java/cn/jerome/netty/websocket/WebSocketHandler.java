@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -101,10 +102,11 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object>
                 userId = key;
             }
         }
-        TextWebSocketFrame tws=new TextWebSocketFrame(new Date().toString()+userId+"====>>"+request);
+
+        TextWebSocketFrame tws=new TextWebSocketFrame(sendMsgObjStr(userId,request));
 
         //所有连接上的channel 都发送消息
-        channels.write(tws);
+        channels.writeAndFlush(tws);
     }
     /**
      * 功能描述: <br>
@@ -149,7 +151,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object>
          //添加channel
 
         channels.add(ctx.channel());
-        channels.writeAndFlush(new TextWebSocketFrame("[服务器] - "+userId+"加入"));
+        channels.writeAndFlush(new TextWebSocketFrame(sendMsgObjStr(userId,"加入")));
     }
     /**
      * 功能描述: <br>
@@ -187,27 +189,22 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object>
         ctx.flush();
     }
 
+    public String sendMsgObjStr(String userId,String message){
+        Gson g = new Gson();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:MM:ss");
+        Map<String,Object> messageMap = new HashMap();
+        messageMap.put("userId",userId);
+        messageMap.put("message",message);
+        messageMap.put("createTime",dateFormat.format(new Date()));
+        return   g.toJson(messageMap);
+    }
+
     //客户端与服务端创建连接时调用
     /*
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
        channels.add(ctx.channel())
        channels.writeAndFlush(new TextWebSocketFrame("[服务器] - "+ctx.channel().remoteAddress()+"加入"));
-    }
-
-   @Override
-    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-        Channel channel = ctx.channel();
-
-        //广播消息
-        channels.writeAndFlush(new TextWebSocketFrame("[服务器] - "+channel.remoteAddress()+"加入"));
-    }
-
-    @Override
-    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        Channel channel = ctx.channel();
-        //从 map内去除改用户
-        channels.writeAndFlush(new TextWebSocketFrame("[服务器] -"+ channel.remoteAddress() +"离开"));
     }
 */
 
@@ -223,14 +220,15 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object>
            }
         }
         userChannelMap.remove(userId);
-        channels.writeAndFlush(new TextWebSocketFrame("[服务器] -"+userId + "下线了"));
+        channels.writeAndFlush(new TextWebSocketFrame(sendMsgObjStr(userId,"下线")));
 
     }
 
 
 
     public void sendAllMessage(String message) {
-        channels.writeAndFlush(new TextWebSocketFrame(message));
+
+        channels.writeAndFlush(new TextWebSocketFrame(sendMsgObjStr("System",message)));
     }
 
     // 此为单点消息
@@ -239,7 +237,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object>
             if(key.equals(userId)){
                 Map channelMap  =  userChannelMap.get(key);
                 Channel channel = (Channel) channelMap.get("channelObj");
-                channel.writeAndFlush(new TextWebSocketFrame(message));
+                channel.writeAndFlush(new TextWebSocketFrame(sendMsgObjStr("System",message)));
             }
 
         }
