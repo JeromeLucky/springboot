@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
  * @since 1.0.0
  */
 
-//@Component
+//@Component  自定义启动类
 public class ApplicationStartListener implements ApplicationListener<ApplicationStartedEvent> {
     @Autowired
     @Qualifier("serverBootstrap")
@@ -34,7 +34,7 @@ public class ApplicationStartListener implements ApplicationListener<Application
     @Override
     public void onApplicationEvent(ApplicationStartedEvent event) {
         try {
-            serverBootstrap.bind(9999).sync().channel().closeFuture().sync().channel();
+            serverBootstrap.bind(8888).sync().channel().closeFuture().sync().channel();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

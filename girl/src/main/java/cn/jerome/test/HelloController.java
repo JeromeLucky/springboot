@@ -18,8 +18,6 @@ import java.util.List;
 @RestController
 public class HelloController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    @Value("${selfParam}")
     private String selfParam;
     @Value("${age}")
     private int age;

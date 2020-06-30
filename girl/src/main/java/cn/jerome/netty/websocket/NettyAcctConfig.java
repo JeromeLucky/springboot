@@ -36,43 +36,4 @@ public class NettyAcctConfig {
 
     private int backlog;
 
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public int getBossThread() {
-        return bossThread;
-    }
-
-    public void setBossThread(int bossThread) {
-        this.bossThread = bossThread;
-    }
-
-    public int getWorkerThread() {
-        return workerThread;
-    }
-
-    public void setWorkerThread(int workerThread) {
-        this.workerThread = workerThread;
-    }
-
-    public boolean isKeepalive() {
-        return keepalive;
-    }
-
-    public void setKeepalive(boolean keepalive) {
-        this.keepalive = keepalive;
-    }
-
-    public int getBacklog() {
-        return backlog;
-    }
-
-    public void setBacklog(int backlog) {
-        this.backlog = backlog;
-    }
 }

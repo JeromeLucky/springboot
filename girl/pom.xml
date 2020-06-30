@@ -23,6 +23,7 @@
 		<java.version>1.8</java.version>
 		<mysql.version>5.1.32</mysql.version>
 		<oracle.version>11.2.0.3</oracle.version>
+		<pdfbox.version>1.8.12</pdfbox.version>
 	</properties>
 
 	<dependencies>
@@ -121,6 +122,20 @@
 			<version>5.0.0.Alpha1</version>
 		</dependency>
 
+
+
+		<dependency>
+			<groupId>technology.tabula</groupId>
+			<artifactId>tabula</artifactId>
+			<version>1.0.3</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-simple</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -143,6 +158,20 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
+
+		<!-- sftp -->
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.55</version>
+		</dependency>
+		<!-- commons-pool2 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
+			<version>2.6.1</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>

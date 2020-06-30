@@ -30,6 +30,8 @@ import org.springframework.stereotype.Component;
  * @create 2019/9/19
  * @since 1.0.0
  */
+
+//配置 请求协议和处理 handler
 @Component
 @Qualifier("selfChannelInitializer")
 public class WebSocketChannelHandler extends ChannelInitializer<SocketChannel> {
@@ -40,8 +42,8 @@ public class WebSocketChannelHandler extends ChannelInitializer<SocketChannel> {
         socketChannel.pipeline().addLast("http-codec",new HttpServerCodec());
         socketChannel.pipeline().addLast("aggregator",new HttpObjectAggregator(65535));
         socketChannel.pipeline().addLast("http-chunked",new ChunkedWriteHandler());
-        socketChannel.pipeline().addLast(new WebSocketServerProtocolHandler("/ws"));
-        socketChannel.pipeline().addLast("handler",webSocketHandler);  //这里不能使用new，不然在handler中不能注入依赖
 
+        socketChannel.pipeline().addLast("handler",webSocketHandler);  //这里不能使用new，不然在handler中不能注入依赖
+        socketChannel.pipeline().addLast(new WebSocketServerProtocolHandler("/ws"));//如果需要拦截 第一次链接 就需要放在末尾
     }
 }

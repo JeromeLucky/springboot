@@ -10,6 +10,8 @@
  */
 package cn.jerome.netty.websocket;
 
+import com.google.gson.Gson;
+import com.rabbitmq.tools.json.JSONUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -22,12 +24,16 @@ import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.CharsetUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -38,6 +44,7 @@ import java.util.Date;
  * @create 2019/9/19
  * @since 1.0.0
  */
+@Data
 @Component
 @Qualifier("webSocketHandler")
 @ChannelHandler.Sharable
@@ -45,6 +52,8 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object>
 {
 
     private WebSocketServerHandshaker handshaker;
+
+    private static ConcurrentHashMap<String,Map<String,Object>> userChannelMap  = new ConcurrentHashMap<String,Map<String,Object>>();
 
     @Autowired
     @Qualifier("tcpSocketAddress")
@@ -65,7 +74,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object>
         }
     }
 
-    private  void handlerWebsocketFrame(ChannelHandlerContext ctx,WebSocketFrame frame){
+    private  void handlerWebsocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame){
         //判断是否未关闭websocket的请求
         if(frame instanceof CloseWebSocketFrame){
             handshaker.close(ctx.channel(), (CloseWebSocketFrame) frame.retain());
@@ -83,8 +92,16 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object>
         //返回应答消息
         //获取客户端向服务端发送的消息
         String request = ((TextWebSocketFrame) frame).text();
-        System.out.println("服务端收到的消息为====>>>"+request);
-        TextWebSocketFrame tws=new TextWebSocketFrame(new Date().toString()+ctx.channel().id()+"====>>"+request);
+
+        //获取用户信息
+        String userId = "";
+        for(String key : userChannelMap.keySet()){
+            Map channelMap  =  userChannelMap.get(key);
+            if(ctx.channel().id().equals(channelMap.get("channelId"))){
+                userId = key;
+            }
+        }
+        TextWebSocketFrame tws=new TextWebSocketFrame(new Date().toString()+userId+"====>>"+request);
 
         //所有连接上的channel 都发送消息
         channels.write(tws);
@@ -101,13 +118,27 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object>
      */
     private  void  handHttpRequest(ChannelHandlerContext ctx,FullHttpRequest req){
         //
+        String uri = req.getUri();//连接时配置当前用户  this.websocket = new WebSocket('ws://localhost:8888/websocket？name='+ this.userName)
+        String userId = null;
+        if (null != uri && uri.contains("/websocket") && uri.contains("?")) {
+            String[] uriArray = uri.split("\\?");
+            if (null != uriArray && uriArray.length > 1) {
+                String[] paramsArray = uriArray[1].split("=");
+                if (null != paramsArray && paramsArray.length > 1) {
+                   userId = paramsArray[1];
+                   Map<String,Object> channelMap =  new HashMap<>();
+                        channelMap.put("channelId",ctx.channel().id());
+                        channelMap.put("channelObj",ctx.channel());
+                    userChannelMap.put(userId,channelMap);
+                }
+            }
+        }
         if(!req.getDecoderResult().isSuccess() || !("websocket".equals(req.headers().get("upgrade")))){
             sendHttpResponse(ctx,req,new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.BAD_REQUEST));
             return;
         }
         //http  websocket 握手请求处理逻辑
         String url="ws://"+tcpPort+"/websocket";
-
         WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(url,null,false);
                 handshaker=wsFactory.newHandshaker(req);
                 if(handshaker==null){
@@ -115,6 +146,10 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object>
                 }else{
                     handshaker.handshake(ctx.channel(),req);
                 }
+         //添加channel
+
+        channels.add(ctx.channel());
+        channels.writeAndFlush(new TextWebSocketFrame("[服务器] - "+userId+"加入"));
     }
     /**
      * 功能描述: <br>
@@ -153,17 +188,61 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<Object>
     }
 
     //客户端与服务端创建连接时调用
+    /*
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        channels.add(ctx.channel());
-        System.out.println("客户端与服务端连接");
+       channels.add(ctx.channel())
+       channels.writeAndFlush(new TextWebSocketFrame("[服务器] - "+ctx.channel().remoteAddress()+"加入"));
     }
+
+   @Override
+    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+        Channel channel = ctx.channel();
+
+        //广播消息
+        channels.writeAndFlush(new TextWebSocketFrame("[服务器] - "+channel.remoteAddress()+"加入"));
+    }
+
+    @Override
+    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+        Channel channel = ctx.channel();
+        //从 map内去除改用户
+        channels.writeAndFlush(new TextWebSocketFrame("[服务器] -"+ channel.remoteAddress() +"离开"));
+    }
+*/
+
     //客户端与服务端断开
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         channels.remove(ctx.channel());
-        System.out.println("客户端与服务端关闭");
+        String userId = "";
+        for(String key : userChannelMap.keySet()){
+           Map channelMap  =  userChannelMap.get(key);
+           if(ctx.channel().id().equals(channelMap.get("channelId"))){
+               userId = key;
+           }
+        }
+        userChannelMap.remove(userId);
+        channels.writeAndFlush(new TextWebSocketFrame("[服务器] -"+userId + "下线了"));
+
     }
 
+
+
+    public void sendAllMessage(String message) {
+        channels.writeAndFlush(new TextWebSocketFrame(message));
+    }
+
+    // 此为单点消息
+    public void sendOneMessage(String userId, String message) {
+        for(String key : userChannelMap.keySet()){
+            if(key.equals(userId)){
+                Map channelMap  =  userChannelMap.get(key);
+                Channel channel = (Channel) channelMap.get("channelObj");
+                channel.writeAndFlush(new TextWebSocketFrame(message));
+            }
+
+        }
+    }
 
 }

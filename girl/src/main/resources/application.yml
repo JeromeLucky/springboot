@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8089
   servlet:
     context-path: /girl
 selfParam: A
@@ -91,6 +91,16 @@ http:
   #提交请求前测试连接是否可用
   staleConnectionCheckEnabled: true
 
+sftp:
+  host: 10.226.50.5  # 服务器ip
+  port: 22 # ssh端口
+  username: root # 用户名
+  password: Golic118 # 密码
+  # 连接池参数
+  pool:
+    max-total: 10
+    max-idle: 10
+    min-idle: 5
 
 ---
 spring:
